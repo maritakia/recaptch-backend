@@ -9,7 +9,7 @@ app.use(express.json());
 // Route to handle reCAPTCHA token verification
 app.post('/verify-recaptcha', async (req, res) => {
   const { token } = req.body; // Get the reCAPTCHA token from the request body
-  const secretKey = '6Lcuky0qAAAAAEa_sZ6vqEky-pIO1d8LG-8y21Uf'; // Replace this with your secret key from Google
+  const secretKey = '6LeEtUUqAAAAAARgwojV3Rn8AFr-YJpyp7wUCBWA'; // Replace this with your secret key from Google
 
   try {
     // Make a POST request to Google's reCAPTCHA API
