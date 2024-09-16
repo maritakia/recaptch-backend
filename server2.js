@@ -1,21 +1,25 @@
-const onReceiveToken = async (token) => {
-  try {
-    const response = await fetch("https://your-app-name.herokuapp.com/verify-recaptcha", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token }),
-    });
-    const result = await response.json();
+const express = require('express');
+const axios = require('axios');
 
-    if (result.success) {
-      console.log("reCAPTCHA verified successfully");
-      // Proceed with Firebase authentication
+const app = express();
+app.use(express.json());
+
+app.post('/verify-recaptcha', async (req, res) => {
+  const { token } = req.body;
+  const secretKey = '6LeEtUUqAAAAAARgwojV3Rn8AFr-YJpyp7wUCBWA';
+
+  try {
+    const response = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`
+    );
+    const data = response.data;
+
+    if (data.success) {
+      return res.json({ success: true });
     } else {
-      console.log("reCAPTCHA failed", result.error);
+      return res.status(400).json({ success: false, error: data['error-codes'] });
     }
   } catch (error) {
-    console.error("reCAPTCHA validation error", error);
+    return res.status(500).json({ success: false, error: 'Server error' });
   }
-};
+});
